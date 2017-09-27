@@ -16,7 +16,8 @@ class App extends Component {
       categories: [],
       searchParam: '',
       size: 25,
-      filters: []
+      filters: [],
+      searchError: undefined
     }
   }
   componentDidMount() {
@@ -78,8 +79,10 @@ class App extends Component {
 
   _handleSearch = (e) => {
     e.preventDefault();
+    this.setState({searchError:undefined});
     const query = this.state.searchParam;
     if(query.length<3) {
+      this.setState({searchError:'3 letter minimum'});
       return;
     }
     this._getJokesByQuery(query);
@@ -123,6 +126,7 @@ class App extends Component {
               <SearchForm handleSearch={this._handleSearch}
                           handleInputChange={this._handleInputChange}
                           searchParam={this.state.searchParam}
+                          error = {this.state.searchError}
               />
               <CategoriesList categories = {categories} 
                               fetchByCategory = {this._toggleFilterCategory}
