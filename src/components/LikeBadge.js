@@ -7,7 +7,7 @@ class LikeBadge extends Component {
             liked: false,    
         }
     }
-    changeText() {
+    changeText = () => {
         this.setState({
             liked: !this.state.liked
         })
@@ -17,7 +17,7 @@ class LikeBadge extends Component {
         let badgeColorClass = this.state.liked ? 'badge-primary ' : 'badge-success';
         return (
             <span className={'badge badge badge-pill like-badge ' + badgeColorClass}
-                onClick = {this.changeText.bind(this)}>
+                onClick = {this.changeText}>
                 {badgeText}
             </span>
         );
