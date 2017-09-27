@@ -13,5 +13,5 @@ in command line type </br>
 
 
 ## Running 
-in command inside project folder type</br>
+in command line inside project folder type</br>
 'npm start'</br>
