@@ -3,9 +3,9 @@ import './App.css';
 import Header from './components/Header';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import image from './chuck.jpg';
-import Joke from './components/Joke';
 import SearchForm from './components/SearchForm';
 import CategoriesList from './components/CategoriesList';
+import JokesList from './components/JokesList';
 import fetchData from './services/fetchData';
 
 class App extends Component {
@@ -21,7 +21,6 @@ class App extends Component {
     }
   }
   componentDidMount() {
-    this._getRandomJoke();
     this._getCategories();
     this._getJokesByQuery();
   }
@@ -36,13 +35,6 @@ class App extends Component {
       this.setState({jokes: [...jokes]});
     })
   }
-  _getRandomJoke = () => {
-    fetchData('https://api.chucknorris.io/jokes/random')
-    .then(data => {
-      this.setState({jokes: [...this.state.jokes,data]})
-    })
-  }
-
   _getCategories = () => {
     fetchData('https://api.chucknorris.io/jokes/categories')
     .then(data => {
@@ -101,16 +93,7 @@ class App extends Component {
   _getJokes = () => {
     const size = this.state.size;
     const filteredJokes = this._filterResult(this.state.jokes);
-    const jokes = filteredJokes.slice(0,size) || [];
-    if (jokes.length > 0) {
-      return jokes.map((joke)=>{
-        return <Joke key={joke.id}
-                      value={joke.value}
-                      category={joke.category || undefined}/>
-      })
-    }
-      
-    return <h4>Oops, couldn't find anything :)</h4>
+    return  filteredJokes.slice(0,size) || [];
   }
 
   render() {
@@ -134,7 +117,7 @@ class App extends Component {
               <div className='container'>
                 <div className='row'>
                   <div className='col-lg-6 offset-lg-3'>
-                      {jokes}
+                      <JokesList jokes = {jokes} />
                   </div>
                 </div>
               </div>
