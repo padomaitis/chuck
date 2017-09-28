@@ -17,30 +17,35 @@ class App extends Component {
       searchParam: '',
       size: 25,
       filters: [],
-      searchError: undefined
+      searchError: undefined,
+      likedJokes: []
     }
   }
   componentDidMount() {
-    this._getCategories();
     this._getJokesByQuery();
   }
 
-  _getJokesByQuery = (query='wa') => {
+  _getJokesByQuery = (query) => {
+    query = query || 'wa'
     fetchData('https://api.chucknorris.io/jokes/search?query='+query)
     .then(data => {
       let jokes = [];
       if(data.result){
         jokes = data.result;
       }
-      this.setState({jokes: [...jokes]});
+      this.setState({jokes: [...jokes]}, () => this._getCategories());
     })
   }
   _getCategories = () => {
-    fetchData('https://api.chucknorris.io/jokes/categories')
-    .then(data => {
-      this.setState({categories: data});
+    const categories = new Set();
+    this.state.jokes.map(joke => {
+      if (joke.category) {
+              categories.add(joke.category[0])
+      }
     })
+    this.setState({categories: [...categories]}) 
   }
+
   _fetchByCategory = (e) => {
     const category = e.target.value;
     fetchData('https://api.chucknorris.io/jokes/random?category='+category)
@@ -73,12 +78,12 @@ class App extends Component {
     e.preventDefault();
     this.setState({searchError:undefined});
     const query = this.state.searchParam;
-    if(query.length<3) {
+    if ( query && query.length <3 ) {
       this.setState({searchError:'3 letter minimum'});
       return;
     }
     this._getJokesByQuery(query);
-    this.setState({searchParam:''});
+    this.setState({searchParam: ''});
   }
   
   _filterResult = (results) => {
@@ -95,10 +100,26 @@ class App extends Component {
     const filteredJokes = this._filterResult(this.state.jokes);
     return  filteredJokes.slice(0,size) || [];
   }
+  
+  _toggleLiked = (id) => (e) => {
+    let likedIds = this.state.likedJokes;
+    if(likedIds.includes(id)) {
+      likedIds = likedIds.filter(likedId => 
+        likedId !== id
+      )
+    }
+    else {
+      likedIds = [...likedIds, id]
+    }
+    this.setState({
+        likedJokes: likedIds
+      })
+  }
 
   render() {
     const jokes = this._getJokes();
     const categories = this.state.categories;
+    const likedJokes = this.state.likedJokes;
     return (
         <div>
             <Header/>
@@ -117,7 +138,7 @@ class App extends Component {
               <div className='container'>
                 <div className='row'>
                   <div className='col-lg-6 offset-lg-3'>
-                      <JokesList jokes = {jokes} />
+                      <JokesList likedJokes = {likedJokes} jokes = {jokes} toggleLiked = {this._toggleLiked}/>
                   </div>
                 </div>
               </div>

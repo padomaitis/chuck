@@ -1,11 +1,12 @@
 import React from 'react';
 
 const LikeBadge = (props) => { 
-    let badgeText = props.liked ? 'Liked' : 'Like it';
-    let badgeColorClass = props.liked ? 'badge-primary ' : 'badge-success';
+    const {liked, toggleLiked, id} = props;
+    const badgeText = liked ? 'Liked' : 'Like it';
+    const badgeColorClass = liked ? 'badge-primary ' : 'badge-success';
     return (
         <span className={'badge badge badge-pill like-badge ' + badgeColorClass}
-            onClick = {props.toggleLike}>
+            onClick = {toggleLiked(id)}>
             {badgeText}
         </span>
     );
