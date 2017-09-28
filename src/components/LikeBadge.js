@@ -1,27 +1,14 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class LikeBadge extends Component { 
-    constructor(props) {
-        super(props)
-        this.state = {
-            liked: false,    
-        }
-    }
-    changeText = () => {
-        this.setState({
-            liked: !this.state.liked
-        })
-    }
-    render() {
-        let badgeText = this.state.liked ? 'Liked' : 'Like it';
-        let badgeColorClass = this.state.liked ? 'badge-primary ' : 'badge-success';
-        return (
-            <span className={'badge badge badge-pill like-badge ' + badgeColorClass}
-                onClick = {this.changeText}>
-                {badgeText}
-            </span>
-        );
-    };
+const LikeBadge = (props) => { 
+    let badgeText = props.liked ? 'Liked' : 'Like it';
+    let badgeColorClass = props.liked ? 'badge-primary ' : 'badge-success';
+    return (
+        <span className={'badge badge badge-pill like-badge ' + badgeColorClass}
+            onClick = {props.toggleLike}>
+            {badgeText}
+        </span>
+    );
 };
 
 export default LikeBadge;

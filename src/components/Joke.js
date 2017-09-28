@@ -5,6 +5,18 @@ class Joke extends Component {
     static defaultProps = {
         category: 'Random'
     }
+    constructor(props) {
+        super(props);
+        this.state = {
+            liked:false
+        }
+    }
+
+    toggleLike = () => {
+        this.setState({
+            liked: !this.state.liked
+        }) 
+    }
     render() {
         const {value,category} = this.props;
         return (
@@ -13,7 +25,7 @@ class Joke extends Component {
                 <div className="card-block">
                     <p className="card-text">{value}</p>
                 </div>
-                <LikeBadge/>
+                <LikeBadge liked = {this.state.liked} toggleLike = {this.toggleLike}/>
             </div>
         ); 
     }
